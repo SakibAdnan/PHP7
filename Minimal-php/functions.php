@@ -21,3 +21,4 @@ function selectedFruits($options, $selectedValue){
         printf("<option value='%s' %s >%s</option>", strtolower($option), $selected, ucwords($option) );
     }
 } 
+
