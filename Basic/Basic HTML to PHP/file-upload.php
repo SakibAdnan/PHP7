@@ -2,6 +2,18 @@
 <html lang="en">
 <?php 
     include_once "functions.php";
+    $fileTypes = [
+        'image/png',
+        'image/jpg',
+        'image/jpeg'
+    ];
+    $multiFile = count($_FILES['photo']['name']);
+    for($i=0; $i<$multiFile; $i++ ){
+        if(isset($_FILES['photo']) && in_array($_FILES['photo']['type'][$i], $fileTypes)){
+            move_uploaded_file($_FILES['photo']['tmp_name'][$i], "images/".$_FILES['photo']['name'][$i] );
+        }
+    }
+
 ?>
 <head>
     <meta charset="UTF-8">
@@ -24,34 +36,42 @@
                         <li><a href="checkbox-select.php">Check Box & Select</a></li>
                         <li><a href="file-upload.php">File upload form</a></li>
                     </ul>
-                    <h1>Welcome to Our FOrm One</h1>
+                    <h1>Welcome to File upload form</h1>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                     <?php
                         $fname = '';
                         $lname = '';
                     ?>
-                    <?php if(isset($_GET['fname']) && !empty($_GET['fname']) ) : ?>
+                    <?php if(isset($_POST['fname']) && !empty($_POST['fname']) ) : ?>
                         <?php 
                            // $fname = htmlspecialchars($_GET['fname']);
-                            $fname = filter_input(INPUT_GET, 'fname',FILTER_SANITIZE_STRING);
+                            $fname = filter_input(INPUT_POST, 'fname',FILTER_SANITIZE_STRING);
                             printf("<h5>First Name: %s </h5>", $fname );
                         ?>    
                     <?php endif;?>
-                    <?php if(isset($_GET['lname']) && !empty($_GET['lname']) ): ?>
+                    <?php if(isset($_POST['lname']) && !empty($_POST['lname']) ): ?>
                         <?php 
                             //$lname = htmlspecialchars( $_GET['lname']);
-                            $lname = filter_input(INPUT_GET, 'lname',FILTER_SANITIZE_STRING);
+                            $lname = filter_input(INPUT_POST, 'lname',FILTER_SANITIZE_STRING);
                             printf("<h5>Last Name: %s </h5>", $lname );
                         ?>  
                     <?php endif;?>
 
-                    <?php print_r($_GET); ?>
-
-                    <form method="GET"  enctype="multipart/form-data" action="">
+                    <?php print_r($_POST); ?>
+                    <pre>
+                        <p>
+                        <?php print_r($_FILES); ?>
+                        </p>
+                    </pre>
+                    <form method="POST"  enctype="multipart/form-data" action="">
                         <label for="fname">First Name</label>
                         <input type="text" name="fname" value="<?php echo $fname ?>">
                         <label for="lname">First Name</label>
                         <input type="text" name="lname" value="<?php echo $lname ?>">
+                        <input type="file" name="photo[]" id="photo">
+                        <label for="photo" class="label-inline">Upload Image</label>
+                        <input type="file" name="photo[]" id="photo">
+                        <label for="photo" class="label-inline">Upload Image</label>
                         <br>    
                         <input type="submit" value="Submit">
                     </form>
